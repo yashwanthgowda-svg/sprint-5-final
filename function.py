@@ -7,7 +7,7 @@ from argon2 import PasswordHasher
 engine = create_engine("sqlite:///gta.db")
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
-SECRET_KEY = "CHANGE_THIS_TO_A_PRIVATE_SECRET"
+SECRET_KEY = "CHANGE_THIS_TO_A_VERY_LONG_PRIVATE_SECRET_KEY_1234"
 ALGORITHM = "HS256"
 password_hasher = PasswordHasher()
 
@@ -132,7 +132,7 @@ def create_manager(username, email, password):
 
 def create_mission(title, description, difficulty, location, reward, manager_id):
     session = Session()
-    mission = Missions(title=title, description=description, difficulty=difficulty,location=location, reward=reward, is_active=True, created_by=manager_id)
+    mission = Missions(title=title, description=description, difficulty=difficulty, location=location, reward=reward, is_active=True, created_by=manager_id)
     session.add(mission)
     session.commit()
     mission_id = mission.id
@@ -345,9 +345,7 @@ def assign_reward(reward_id, player_id):
 
 def get_leaderboard():
     session = Session()
-    players = session.query(Users).filter(
-        Users.role == "player"
-    ).order_by(Users.xp.desc()).all()
+    players = session.query(Users).filter(Users.role == "player").order_by(Users.xp.desc()).all()
     result = []
     for player in players:
         result.append({
@@ -376,3 +374,4 @@ def get_profile(player_id):
     }
     session.close()
     return result
+
