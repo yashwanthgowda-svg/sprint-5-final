@@ -1,15 +1,16 @@
 from fastapi import FastAPI, HTTPException, Header
-from pydantic import BaseModel
+from fastapi.responses import RedirectResponse
+from pydantic import BaseModel, EmailStr
 import function as f
 
 app = FastAPI()
 class RegisterRequest(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     password: str
-  
+
 class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 class RefreshRequest(BaseModel):
@@ -17,7 +18,7 @@ class RefreshRequest(BaseModel):
 
 class ManagerRequest(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     password: str
 
 class MissionRequest(BaseModel):
@@ -201,3 +202,8 @@ def profile(token: str = Header(None)):
         raise HTTPException(status_code=404, detail="User not found")
     return result
 
+@app.get("/")
+def get_message():
+ return{"hello world"}
+
+  
